@@ -1,0 +1,1146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>School Data Schema — Field Reference Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;1,9..144,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1a2e;
+    --ink-soft: #4a4a6a;
+    --ink-faint: #8888aa;
+    --page: #f7f6f1;
+    --surface: #ffffff;
+    --surface2: #f0efe9;
+    --accent: #d45a2a;
+    --accent2: #2a7a8c;
+    --accent3: #6b4fa0;
+    --sped: #b5390e;
+    --sped-light: #fff0ec;
+    --sped-border: #f5bfb0;
+    --tag-bg: #eef6f8;
+    --tag-text: #1a5f6e;
+    --bool-bg: #edf7ed;
+    --bool-text: #1a6b2a;
+    --list-bg: #f3f0fa;
+    --list-text: #4a3080;
+    --border: #e2e0d8;
+    --shadow: 0 2px 16px rgba(26,26,46,0.07);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--page);
+    color: var(--ink);
+    line-height: 1.6;
+    font-size: 15px;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--ink);
+    color: #fff;
+    padding: 56px 48px 40px;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 320px; height: 320px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(212,90,42,0.25) 0%, transparent 70%);
+  }
+  header::after {
+    content: '';
+    position: absolute;
+    bottom: -40px; left: 30%;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(42,122,140,0.2) 0%, transparent 70%);
+  }
+  .header-label {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+  header h1 {
+    font-family: 'Fraunces', serif;
+    font-size: 42px;
+    font-weight: 700;
+    line-height: 1.15;
+    color: #fff;
+    max-width: 620px;
+    position: relative;
+    z-index: 1;
+  }
+  header p {
+    margin-top: 16px;
+    color: rgba(255,255,255,0.65);
+    font-size: 15px;
+    max-width: 560px;
+    position: relative;
+    z-index: 1;
+  }
+  .header-meta {
+    margin-top: 28px;
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 1;
+  }
+  .header-stat {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 8px;
+    padding: 10px 18px;
+    font-size: 13px;
+    color: rgba(255,255,255,0.8);
+  }
+  .header-stat strong { color: #fff; font-size: 20px; display: block; }
+
+  /* ── LAYOUT ── */
+  .layout {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    min-height: calc(100vh - 200px);
+  }
+
+  /* ── SIDEBAR ── */
+  nav {
+    background: var(--ink);
+    padding: 32px 0;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+  }
+  nav::-webkit-scrollbar { width: 4px; }
+  nav::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 2px; }
+  .nav-section-label {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.3);
+    padding: 16px 24px 6px;
+  }
+  nav a {
+    display: block;
+    padding: 7px 24px;
+    color: rgba(255,255,255,0.6);
+    text-decoration: none;
+    font-size: 13.5px;
+    transition: all 0.15s;
+    border-left: 2px solid transparent;
+  }
+  nav a:hover {
+    color: #fff;
+    background: rgba(255,255,255,0.05);
+    border-left-color: var(--accent);
+  }
+  nav a.sped-link {
+    color: #f5bfb0;
+  }
+  nav a.sped-link:hover { color: #ffccc0; border-left-color: var(--sped); }
+
+  /* ── MAIN CONTENT ── */
+  main {
+    padding: 48px 56px;
+    max-width: 900px;
+  }
+
+  /* ── INTRO BOX ── */
+  .intro-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px 32px;
+    margin-bottom: 40px;
+    box-shadow: var(--shadow);
+  }
+  .intro-box h2 {
+    font-family: 'Fraunces', serif;
+    font-size: 20px;
+    color: var(--ink);
+    margin-bottom: 10px;
+  }
+  .intro-box p { color: var(--ink-soft); font-size: 14px; }
+  .legend {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-top: 18px;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 12.5px;
+    color: var(--ink-soft);
+  }
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 2px 8px;
+    border-radius: 20px;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+  }
+  .badge-text { background: #e8f4f7; color: var(--accent2); }
+  .badge-number { background: #fef3e8; color: #b06020; }
+  .badge-bool { background: var(--bool-bg); color: var(--bool-text); }
+  .badge-list { background: var(--list-bg); color: var(--list-text); }
+  .badge-enum { background: var(--tag-bg); color: var(--tag-text); }
+  .badge-object { background: #f5f0ff; color: var(--accent3); }
+  .badge-required { background: #fff0ec; color: var(--sped); border: 1px solid var(--sped-border); }
+  .badge-optional { background: var(--surface2); color: var(--ink-faint); }
+
+  /* ── SECTION ── */
+  .section {
+    margin-bottom: 52px;
+    scroll-margin-top: 24px;
+  }
+  .section-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 20px;
+    padding-bottom: 14px;
+    border-bottom: 2px solid var(--border);
+  }
+  .section-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .section-header h2 {
+    font-family: 'Fraunces', serif;
+    font-size: 24px;
+    color: var(--ink);
+    line-height: 1.2;
+  }
+  .section-header p {
+    font-size: 13.5px;
+    color: var(--ink-soft);
+    margin-top: 4px;
+  }
+
+  /* SPED section special styling */
+  .sped-section .section-header {
+    border-bottom-color: var(--sped-border);
+  }
+  .sped-section .section-header h2 { color: var(--sped); }
+  .sped-section .section-icon { background: var(--sped-light); }
+
+  /* ── FIELD TABLE ── */
+  .field-table {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+  .field-row {
+    display: grid;
+    grid-template-columns: 220px 90px 1fr;
+    gap: 0;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.12s;
+  }
+  .field-row:last-child { border-bottom: none; }
+  .field-row:hover { background: #fafaf7; }
+
+  .field-row.sped-row { background: #fffbfa; }
+  .field-row.sped-row:hover { background: var(--sped-light); }
+
+  .field-cell {
+    padding: 13px 16px;
+    display: flex;
+    align-items: flex-start;
+    border-right: 1px solid var(--border);
+  }
+  .field-cell:last-child { border-right: none; }
+
+  .field-name {
+    font-family: 'DM Mono', 'Fira Mono', 'Courier New', monospace;
+    font-size: 12.5px;
+    color: var(--ink);
+    font-weight: 500;
+    word-break: break-all;
+  }
+  .field-name.required-field { color: var(--sped); }
+
+  .field-desc {
+    font-size: 13.5px;
+    color: var(--ink-soft);
+    line-height: 1.5;
+  }
+  .field-desc strong { color: var(--ink); font-weight: 500; }
+
+  /* ── TABLE HEADER ── */
+  .field-table-header {
+    display: grid;
+    grid-template-columns: 220px 90px 1fr;
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+  .field-table-header div { padding: 9px 16px; border-right: 1px solid var(--border); }
+  .field-table-header div:last-child { border-right: none; }
+
+  /* ── ENUM TABLE ── */
+  .enum-section {
+    margin-top: 20px;
+  }
+  .enum-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 6px;
+    margin-top: 10px;
+  }
+  .enum-chip {
+    background: var(--tag-bg);
+    color: var(--tag-text);
+    border: 1px solid #c8e8ee;
+    border-radius: 6px;
+    padding: 5px 10px;
+    font-size: 12px;
+    font-family: 'DM Mono', monospace;
+  }
+  .enum-chip.sped-chip {
+    background: var(--sped-light);
+    color: var(--sped);
+    border-color: var(--sped-border);
+  }
+
+  /* ── SUBSECTION ── */
+  .subsection {
+    margin-top: 28px;
+  }
+  .subsection-title {
+    font-family: 'Fraunces', serif;
+    font-size: 16px;
+    color: var(--ink);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .subsection-title::before {
+    content: '';
+    display: block;
+    width: 3px;
+    height: 16px;
+    background: var(--accent2);
+    border-radius: 2px;
+  }
+  .subsection-title.sped-sub::before { background: var(--sped); }
+
+  /* ── CALLOUT ── */
+  .callout {
+    border-left: 3px solid var(--accent2);
+    background: #f0f8fa;
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 16px 0;
+    font-size: 13.5px;
+    color: var(--ink-soft);
+  }
+  .callout.sped-callout {
+    border-left-color: var(--sped);
+    background: var(--sped-light);
+    color: #7a2010;
+  }
+  .callout strong { color: var(--ink); }
+
+  /* ── DEPTH DIAGRAM ── */
+  .depth-diagram {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px 28px;
+    margin: 20px 0;
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    line-height: 2;
+    box-shadow: var(--shadow);
+  }
+  .depth-l0 { color: var(--ink); font-weight: 600; }
+  .depth-l1 { color: var(--accent2); padding-left: 20px; }
+  .depth-l2 { color: var(--accent3); padding-left: 44px; }
+  .depth-l3 { color: var(--sped); padding-left: 68px; }
+  .depth-arrow { color: var(--ink-faint); margin-right: 4px; }
+
+  /* ── GRADE PYRAMID ── */
+  .pyramid {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 20px 0;
+  }
+  .pyramid-level {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 13.5px;
+  }
+  .pyramid-l1 { background: #fff0ec; border: 1px solid var(--sped-border); }
+  .pyramid-l2 { background: #eef6f8; border: 1px solid #c8e8ee; }
+  .pyramid-l3 { background: #f3f0fa; border: 1px solid #d0c4ee; }
+  .pyramid-badge {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 10px;
+    border-radius: 20px;
+    white-space: nowrap;
+  }
+
+  @media (max-width: 900px) {
+    .layout { grid-template-columns: 1fr; }
+    nav { position: static; height: auto; }
+    main { padding: 32px 24px; }
+    .field-row { grid-template-columns: 1fr; }
+    .field-table-header { display: none; }
+    .field-cell { border-right: none; padding: 8px 14px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-label">Internal Reference Document · v2.0.0</div>
+  <h1>School Data<br>Field Guide</h1>
+  <p>Plain-language explanation of every data field we collect for each school. No coding knowledge required.</p>
+  <div class="header-meta">
+    <div class="header-stat"><strong>11</strong> Sections</div>
+    <div class="header-stat"><strong>130+</strong> Fields</div>
+    <div class="header-stat"><strong>25</strong> SPED Categories</div>
+    <div class="header-stat"><strong>3</strong> SPED Granularity Levels</div>
+  </div>
+</header>
+
+<div class="layout">
+
+<!-- ── SIDEBAR NAV ── -->
+<nav>
+  <div class="nav-section-label">Overview</div>
+  <a href="#how-to-read">How to Read This Guide</a>
+  <a href="#structure">Document Structure</a>
+
+  <div class="nav-section-label">School Basics</div>
+  <a href="#identity">🏫 Identity</a>
+  <a href="#contact">📍 Contact & Location</a>
+  <a href="#grades">🎓 Grades Served</a>
+  <a href="#enrollment">👥 Enrollment & Size</a>
+  <a href="#tuition">💰 Tuition</a>
+  <a href="#schedule">🕐 Schedule</a>
+  <a href="#programs">📚 Programs & Accreditation</a>
+  <a href="#admissions">📋 Admissions</a>
+
+  <div class="nav-section-label">⚠ Priority</div>
+  <a href="#sped" class="sped-link">🔴 Special Education (SPED)</a>
+  <a href="#sped-schoolwide" class="sped-link">  → School-Wide SPED</a>
+  <a href="#sped-gradeband" class="sped-link">  → Grade Band SPED</a>
+  <a href="#sped-gradelevel" class="sped-link">  → Individual Grade SPED</a>
+
+  <div class="nav-section-label">Detail Layers</div>
+  <a href="#gradelevel">📊 Grade Level Attributes</a>
+  <a href="#facilities">🏗 Facilities</a>
+  <a href="#features">✅ School Features</a>
+  <a href="#college">🎓 College Outcomes</a>
+  <a href="#activities">⚽ Activities</a>
+  <a href="#evidence">🔍 Evidence & Sources</a>
+
+  <div class="nav-section-label">Reference</div>
+  <a href="#all-enums">All Allowed Values</a>
+</nav>
+
+<!-- ── MAIN ── -->
+<main>
+
+  <!-- HOW TO READ -->
+  <div class="intro-box" id="how-to-read">
+    <h2>How to Read This Guide</h2>
+    <p>Each field has a <strong>name</strong> (what it's called internally), a <strong>type</strong> (what kind of value it holds), and a <strong>description</strong> (what it means and example values). Fields marked <span class="badge badge-required">required</span> must always have a value. Everything else is <span class="badge badge-optional">optional</span> — blank means we don't know yet.</p>
+    <div class="legend">
+      <div class="legend-item"><span class="badge badge-text">Text</span> Any words or sentence</div>
+      <div class="legend-item"><span class="badge badge-number">Number</span> A numeric value</div>
+      <div class="legend-item"><span class="badge badge-bool">Yes/No</span> A true or false flag</div>
+      <div class="legend-item"><span class="badge badge-list">List</span> Multiple values</div>
+      <div class="legend-item"><span class="badge badge-enum">Choice</span> Must be one of the allowed values</div>
+      <div class="legend-item"><span class="badge badge-object">Section</span> A nested group of fields</div>
+    </div>
+  </div>
+
+  <!-- STRUCTURE -->
+  <div class="section" id="structure">
+    <div class="section-header">
+      <div class="section-icon" style="background:#f0f8fa; font-size:20px;">🗂</div>
+      <div>
+        <h2>Document Structure</h2>
+        <p>How all the sections fit together into one school record</p>
+      </div>
+    </div>
+    <div class="depth-diagram">
+      <div class="depth-l0">📄 SchoolData (one record per school)</div>
+      <div class="depth-l1"><span class="depth-arrow">├─</span> school_name, nces_id, schema_version, last_updated</div>
+      <div class="depth-l1"><span class="depth-arrow">└─</span> intelligence (all collected details)</div>
+      <div class="depth-l2"><span class="depth-arrow">├─</span> Identity, Contact, Grades, Enrollment, Tuition, Schedule</div>
+      <div class="depth-l2"><span class="depth-arrow">├─</span> Programs, Admissions, Activities, Facilities</div>
+      <div class="depth-l2"><span class="depth-arrow">├─</span> 🔴 sped (school-wide special education)</div>
+      <div class="depth-l3"><span class="depth-arrow">└─</span> by_grade_band → by_grade (drill-down levels)</div>
+      <div class="depth-l2"><span class="depth-arrow">├─</span> grade_level_attributes (one block per grade band)</div>
+      <div class="depth-l3"><span class="depth-arrow">└─</span> sped (SPED info for that specific band)</div>
+      <div class="depth-l2"><span class="depth-arrow">└─</span> college_outcomes, school_features, evidence</div>
+    </div>
+    <div class="callout">
+      <strong>Key idea:</strong> SPED data appears at three levels — school-wide, per grade band (e.g. K–2), and per individual grade (e.g. Kindergarten). Fill in as much as you can find. The structure accepts partial data at any level.
+    </div>
+  </div>
+
+  <!-- IDENTITY -->
+  <div class="section" id="identity">
+    <div class="section-header">
+      <div class="section-icon" style="background:#fff3e8;">🏫</div>
+      <div><h2>Identity</h2><p>What kind of school is it and who runs it?</p></div>
+    </div>
+    <div class="field-table">
+      <div class="field-table-header"><div>Field Name</div><div>Type</div><div>Description</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name required-field">school_name</span></div><div class="field-cell"><span class="badge badge-text">Text</span></div><div class="field-cell field-desc">The official full name of the school. <strong>Always required.</strong> Example: "Maple Ridge Academy"</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">nces_id</span></div><div class="field-cell"><span class="badge badge-text">Text</span></div><div class="field-cell field-desc">National Center for Education Statistics ID — a unique federal ID assigned to public schools. Example: "123456789012"</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">state_school_id</span></div><div class="field-cell"><span class="badge badge-text">Text</span></div><div class="field-cell field-desc">ID assigned by the state's education department. Different from the NCES ID.</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">school_type</span></div><div class="field-cell"><span class="badge badge-enum">Choice</span></div><div class="field-cell field-desc">The type of school. <strong>Allowed values:</strong> public, charter, magnet, private_independent, private_religious, montessori, waldorf, homeschool_cooperative, virtual_online, hybrid, vocational_technical, special_education_only, therapeutic_day, alternative, unknown</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">aliases</span></div><div class="field-cell"><span class="badge badge-list">List</span></div><div class="field-cell field-desc">Other names the school is known by. Example: ["MRA", "Maple Ridge"]</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">district_name</span></div><div class="field-cell"><span class="badge badge-text">Text</span></div><div class="field-cell field-desc">The school district this school belongs to, if public. Example: "Austin Independent School District"</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">religious_affiliation</span></div><div class="field-cell"><span class="badge badge-enum">Choice</span></div><div class="field-cell field-desc">The school's religious affiliation, if any. <strong>Allowed values:</strong> none, catholic, protestant, evangelical, jewish, islamic, hindu, buddhist, quaker, seventh_day_adventist, lutheran, episcopal, interdenominational, other, unknown</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">faith_based</span></div><div class="field-cell"><span class="badge badge-bool">Yes/No</span></div><div class="field-cell field-desc">Quick flag: is this a faith-based school at all? (Yes/No)</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">description</span></div><div class="field-cell"><span class="badge badge-text">Text</span></div><div class="field-cell field-desc">A short paragraph description of the school, ideally from their own website.</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">principal_name</span></div><div class="field-cell"><span class="badge badge-text">Text</span></div><div class="field-cell field-desc">Full name of the current principal or head of school. Example: "Dr. Sarah Okonkwo"</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">sped_coordinator_name</span></div><div class="field-cell"><span class="badge badge-text">Text</span></div><div class="field-cell field-desc">Full name of the special education coordinator or director, if listed. Very useful for contact purposes.</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">last_updated</span></div><div class="field-cell"><span class="badge badge-text">Text</span></div><div class="field-cell field-desc">When this record was last updated. Format: YYYY-MM-DD. Example: "2024-09-01"</div></div>
+    </div>
+  </div>
+
+  <!-- CONTACT -->
+  <div class="section" id="contact">
+    <div class="section-header">
+      <div class="section-icon" style="background:#eef6f8;">📍</div>
+      <div><h2>Contact & Location</h2><p>How to reach the school and where it is</p></div>
+    </div>
+    <div class="field-table">
+      <div class="field-table-header"><div>Field Name</div><div>Type</div><div>Description</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">phone</span></div><div class="field-cell"><span class="badge badge-text">Text</span></div><div class="field-cell field-desc">Main phone number. Example: "(512) 555-0100"</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">email</span></div><div class="field-cell"><span class="badge badge-text">Text</span></div><div class="field-cell field-desc">Main contact email address.</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">website</span></div><div class="field-cell"><span class="badge badge-text">Text</span></div><div class="field-cell field-desc">Full URL of the school website. Example: "https://mapleridgeacademy.org"</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">address</span></div><div class="field-cell"><span class="badge badge-text">Text</span></div><div class="field-cell field-desc">Full address on one line. Example: "123 Oak Street, Austin, TX 78701"</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">street_address</span></div><div class="field-cell"><span class="badge badge-text">Text</span></div><div class="field-cell field-desc">Street portion only. Example: "123 Oak Street"</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">city</span></div><div class="field-cell"><span class="badge badge-text">Text</span></div><div class="field-cell field-desc">City name.</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">state</span></div><div class="field-cell"><span class="badge badge-text">Text</span></div><div class="field-cell field-desc">Two-letter state code. Example: "TX"</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">zip</span></div><div class="field-cell"><span class="badge badge-text">Text</span></div><div class="field-cell field-desc">ZIP or postal code. Example: "78701"</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">county</span></div><div class="field-cell"><span class="badge badge-text">Text</span></div><div class="field-cell field-desc">County name. Example: "Travis County"</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">geo_lat</span></div><div class="field-cell"><span class="badge badge-number">Number</span></div><div class="field-cell field-desc">GPS latitude coordinate for map display. Example: 30.2672</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">geo_lng</span></div><div class="field-cell"><span class="badge badge-number">Number</span></div><div class="field-cell field-desc">GPS longitude coordinate for map display. Example: -97.7431</div></div>
+    </div>
+  </div>
+
+  <!-- GRADES SERVED -->
+  <div class="section" id="grades">
+    <div class="section-header">
+      <div class="section-icon" style="background:#f3f0fa;">🎓</div>
+      <div><h2>Grades Served</h2><p>Which grades does this school offer?</p></div>
+    </div>
+    <div class="field-table">
+      <div class="field-table-header"><div>Field Name</div><div>Type</div><div>Description</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">grades_served_text</span></div><div class="field-cell"><span class="badge badge-text">Text</span></div><div class="field-cell field-desc">Raw text as found on the school's website. Example: "Grades K–8" or "Pre-K through 12th Grade"</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">grades_lowest</span></div><div class="field-cell"><span class="badge badge-enum">Choice</span></div><div class="field-cell field-desc">The lowest grade offered. <strong>Allowed values:</strong> PK (Pre-K), TK (Transitional K), K, 1 through 12</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">grades_highest</span></div><div class="field-cell"><span class="badge badge-enum">Choice</span></div><div class="field-cell field-desc">The highest grade offered. Same options as above.</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">early_childhood</span></div><div class="field-cell"><span class="badge badge-bool">Yes/No</span></div><div class="field-cell field-desc">Does the school serve Pre-K or Transitional Kindergarten?</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">elementary</span></div><div class="field-cell"><span class="badge badge-bool">Yes/No</span></div><div class="field-cell field-desc">Does the school serve any elementary grades (K–5)?</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">middle_school</span></div><div class="field-cell"><span class="badge badge-bool">Yes/No</span></div><div class="field-cell field-desc">Does the school serve any middle school grades (6–8)?</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">high_school</span></div><div class="field-cell"><span class="badge badge-bool">Yes/No</span></div><div class="field-cell field-desc">Does the school serve any high school grades (9–12)?</div></div>
+    </div>
+  </div>
+
+  <!-- ENROLLMENT -->
+  <div class="section" id="enrollment">
+    <div class="section-header">
+      <div class="section-icon" style="background:#eef6f8;">👥</div>
+      <div><h2>Enrollment & Size</h2><p>How many students and how big are the classes?</p></div>
+    </div>
+    <div class="field-table">
+      <div class="field-table-header"><div>Field Name</div><div>Type</div><div>Description</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">enrollment_claimed</span></div><div class="field-cell"><span class="badge badge-number">Number</span></div><div class="field-cell field-desc">Total number of students enrolled, as stated by the school. Example: 320</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">avg_class_size</span></div><div class="field-cell"><span class="badge badge-text">Text</span></div><div class="field-cell field-desc">Average class size as a text string. Example: "18 students per class"</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">avg_class_size_category</span></div><div class="field-cell"><span class="badge badge-enum">Choice</span></div><div class="field-cell field-desc">Standardized size bucket. <strong>micro</strong> (≤10), <strong>small</strong> (11–18), <strong>medium</strong> (19–25), <strong>large</strong> (26–32), <strong>very_large</strong> (33+), unknown</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">student_teacher_ratio</span></div><div class="field-cell"><span class="badge badge-text">Text</span></div><div class="field-cell field-desc">The ratio of students to teachers. Example: "12:1" means 12 students per teacher.</div></div>
+    </div>
+  </div>
+
+  <!-- TUITION -->
+  <div class="section" id="tuition">
+    <div class="section-header">
+      <div class="section-icon" style="background:#fff8e8;">💰</div>
+      <div><h2>Tuition</h2><p>What does it cost to attend?</p></div>
+    </div>
+    <div class="field-table">
+      <div class="field-table-header"><div>Field Name</div><div>Type</div><div>Description</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">tuition_text</span></div><div class="field-cell"><span class="badge badge-text">Text</span></div><div class="field-cell field-desc">The raw tuition text exactly as found on the school's site. Example: "Tuition ranges from $18,000–$22,000 annually."</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">tuition_min</span></div><div class="field-cell"><span class="badge badge-number">Number</span></div><div class="field-cell field-desc">Lowest annual tuition in US dollars. Example: 18000</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">tuition_max</span></div><div class="field-cell"><span class="badge badge-number">Number</span></div><div class="field-cell field-desc">Highest annual tuition in US dollars. Example: 22000</div></div>
+    </div>
+  </div>
+
+  <!-- SCHEDULE -->
+  <div class="section" id="schedule">
+    <div class="section-header">
+      <div class="section-icon" style="background:#f0fff4;">🕐</div>
+      <div><h2>Schedule & Logistics</h2><p>When is school in session and how do students get there?</p></div>
+    </div>
+    <div class="field-table">
+      <div class="field-table-header"><div>Field Name</div><div>Type</div><div>Description</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">school_hours</span></div><div class="field-cell"><span class="badge badge-text">Text</span></div><div class="field-cell field-desc">Daily school hours. Example: "8:00 AM – 3:15 PM"</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">before_after_care</span></div><div class="field-cell"><span class="badge badge-bool">Yes/No</span></div><div class="field-cell field-desc">Does the school offer before-school or after-school care programs?</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">transportation</span></div><div class="field-cell"><span class="badge badge-enum">Choice</span></div><div class="field-cell field-desc">What transportation is available. <strong>Allowed values:</strong> none, district_bus, private_bus, carpool_only, walking_zone, public_transit, partial, unknown</div></div>
+    </div>
+  </div>
+
+  <!-- PROGRAMS -->
+  <div class="section" id="programs">
+    <div class="section-header">
+      <div class="section-icon" style="background:#f3f0fa;">📚</div>
+      <div><h2>Programs & Accreditation</h2><p>What special programs does the school offer and who has certified it?</p></div>
+    </div>
+    <div class="field-table">
+      <div class="field-table-header"><div>Field Name</div><div>Type</div><div>Description</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">programs_listed</span></div><div class="field-cell"><span class="badge badge-list">List</span></div><div class="field-cell field-desc">Named programs the school advertises. Example: ["AVID", "IB Middle Years Programme", "STEM Academy"]</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">accreditation</span></div><div class="field-cell"><span class="badge badge-list">List</span></div><div class="field-cell field-desc">Accrediting bodies that have certified this school. Example: ["Cognia", "IB", "NAEYC"]</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">dual_language</span></div><div class="field-cell"><span class="badge badge-bool">Yes/No</span></div><div class="field-cell field-desc">Does the school offer a dual-language or bilingual immersion program?</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">languages_offered</span></div><div class="field-cell"><span class="badge badge-list">List</span></div><div class="field-cell field-desc">Languages taught (beyond English). Example: ["Spanish", "French", "Mandarin"]</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">stem_program</span></div><div class="field-cell"><span class="badge badge-bool">Yes/No</span></div><div class="field-cell field-desc">Does the school have a dedicated STEM or STEAM program?</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">arts_program</span></div><div class="field-cell"><span class="badge badge-bool">Yes/No</span></div><div class="field-cell field-desc">Does the school have a dedicated arts program?</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">sports_program</span></div><div class="field-cell"><span class="badge badge-bool">Yes/No</span></div><div class="field-cell field-desc">Does the school have an organized sports or athletics program?</div></div>
+    </div>
+  </div>
+
+  <!-- ADMISSIONS -->
+  <div class="section" id="admissions">
+    <div class="section-header">
+      <div class="section-icon" style="background:#fff3e8;">📋</div>
+      <div><h2>Admissions</h2><p>How does a family apply to get their child into this school?</p></div>
+    </div>
+    <div class="field-table">
+      <div class="field-table-header"><div>Field Name</div><div>Type</div><div>Description</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">open_enrollment</span></div><div class="field-cell"><span class="badge badge-bool">Yes/No</span></div><div class="field-cell field-desc">Can any student enroll without a special application? Typically true for public schools.</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">lottery_based</span></div><div class="field-cell"><span class="badge badge-bool">Yes/No</span></div><div class="field-cell field-desc">Does the school use a lottery system when there are more applicants than spots?</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">application_required</span></div><div class="field-cell"><span class="badge badge-bool">Yes/No</span></div><div class="field-cell field-desc">Must families submit a formal application?</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">admissions_deadline</span></div><div class="field-cell"><span class="badge badge-text">Text</span></div><div class="field-cell field-desc">Application deadline. Example: "January 15" or "2025-01-15"</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">admissions_test_required</span></div><div class="field-cell"><span class="badge badge-bool">Yes/No</span></div><div class="field-cell field-desc">Does admission require an entrance exam or assessment?</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">interview_required</span></div><div class="field-cell"><span class="badge badge-bool">Yes/No</span></div><div class="field-cell field-desc">Is an interview with the student or family part of the admissions process?</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">waiting_list</span></div><div class="field-cell"><span class="badge badge-bool">Yes/No</span></div><div class="field-cell field-desc">Does the school maintain a waiting list?</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">sibling_preference</span></div><div class="field-cell"><span class="badge badge-bool">Yes/No</span></div><div class="field-cell field-desc">Do siblings of current students get enrollment priority?</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">financial_aid_available</span></div><div class="field-cell"><span class="badge badge-bool">Yes/No</span></div><div class="field-cell field-desc">Does the school offer need-based financial aid?</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">scholarship_available</span></div><div class="field-cell"><span class="badge badge-bool">Yes/No</span></div><div class="field-cell field-desc">Does the school offer merit-based scholarships?</div></div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════ -->
+  <!-- SPED — PRIORITY SECTION -->
+  <!-- ══════════════════════════════════════════ -->
+  <div class="section sped-section" id="sped">
+    <div class="section-header">
+      <div class="section-icon">🔴</div>
+      <div>
+        <h2>Special Education (SPED) — Priority Section</h2>
+        <p>The most important section. Captures everything about how the school supports students with disabilities and learning differences.</p>
+      </div>
+    </div>
+
+    <div class="callout sped-callout">
+      <strong>Why three levels?</strong> A school might handle dyslexia very differently in Kindergarten vs. 8th grade. We capture SPED data at the school-wide level first, then drill down to grade bands (K–2, 3–5, etc.), then to individual grades if the detail is available.
+    </div>
+
+    <div class="pyramid">
+      <div class="pyramid-level pyramid-l1">
+        <span class="pyramid-badge" style="background:var(--sped-light);color:var(--sped);border:1px solid var(--sped-border);">Level 1</span>
+        <div><strong>School-Wide SPED</strong> — Applies to the whole school. Always fill this in first.</div>
+      </div>
+      <div class="pyramid-level pyramid-l2">
+        <span class="pyramid-badge" style="background:#eef6f8;color:var(--accent2);border:1px solid #c8e8ee;">Level 2</span>
+        <div><strong>Grade Band SPED</strong> — Specific to a band like "K–2" or "High School". Fill in when detail differs by band.</div>
+      </div>
+      <div class="pyramid-level pyramid-l3">
+        <span class="pyramid-badge" style="background:#f3f0fa;color:var(--accent3);border:1px solid #d0c4ee;">Level 3</span>
+        <div><strong>Individual Grade SPED</strong> — Specific to one grade, e.g. Kindergarten only. Fill in when the finest detail is available.</div>
+      </div>
+    </div>
+
+    <!-- SCHOOL-WIDE SPED -->
+    <div class="subsection" id="sped-schoolwide">
+      <div class="subsection-title sped-sub">School-Wide SPED Fields</div>
+      <div class="field-table">
+        <div class="field-table-header"><div>Field Name</div><div>Type</div><div>Description</div></div>
+        <div class="field-row sped-row"><div class="field-cell"><span class="field-name">sped_available</span></div><div class="field-cell"><span class="badge badge-bool">Yes/No</span></div><div class="field-cell field-desc">Does the school offer any special education services at all?</div></div>
+        <div class="field-row sped-row"><div class="field-cell"><span class="field-name">learning_differences_supported</span></div><div class="field-cell"><span class="badge badge-bool">Yes/No</span></div><div class="field-cell field-desc">Does the school explicitly support students with learning differences (dyslexia, ADHD, etc.)?</div></div>
+        <div class="field-row sped-row"><div class="field-cell"><span class="field-name">iep_504_status</span></div><div class="field-cell"><span class="badge badge-enum">Choice</span></div><div class="field-cell field-desc">Which legal support plans does the school honor? <strong>Allowed values:</strong> iep_available, section_504_available, both_available, iep_only, not_available, unknown. (IEP = Individualized Education Program; 504 = accommodation plan under Section 504 of the Rehabilitation Act)</div></div>
+        <div class="field-row sped-row"><div class="field-cell"><span class="field-name">inclusion_philosophy</span></div><div class="field-cell"><span class="badge badge-enum">Choice</span></div><div class="field-cell field-desc">How does the school approach including SPED students in regular classes? <strong>full_inclusion</strong> = always in general ed, <strong>supported_inclusion</strong> = mostly in general ed with support, <strong>modified_inclusion</strong> = some time in general ed, <strong>separate_program</strong> = dedicated SPED classrooms, <strong>case_by_case</strong>, unknown</div></div>
+        <div class="field-row sped-row"><div class="field-cell"><span class="field-name">disability_categories_served</span></div><div class="field-cell"><span class="badge badge-list">List</span></div><div class="field-cell field-desc">Which types of disabilities does the school serve? See full list in the <a href="#all-enums">Reference section</a> below. Examples: autism, dyslexia, adhd, speech_language_impairment, developmental_delay</div></div>
+        <div class="field-row sped-row"><div class="field-cell"><span class="field-name">service_models</span></div><div class="field-cell"><span class="badge badge-list">List</span></div><div class="field-cell field-desc">How are SPED services delivered? Examples: <strong>push_in</strong> (therapist comes into the class), <strong>pull_out</strong> (student goes to a separate room), <strong>resource_room</strong> (dedicated support room), <strong>co_teaching</strong> (two teachers in one classroom), <strong>self_contained_classroom</strong></div></div>
+        <div class="field-row sped-row"><div class="field-cell"><span class="field-name">therapies_available</span></div><div class="field-cell"><span class="badge badge-list">List</span></div><div class="field-cell field-desc">Which therapies are offered on-site? Examples: speech_language, occupational, physical, applied_behavior_analysis, music_therapy, art_therapy, sensory_integration, social_skills_group</div></div>
+        <div class="field-row sped-row"><div class="field-cell"><span class="field-name">accommodations</span></div><div class="field-cell"><span class="badge badge-list">List</span></div><div class="field-cell field-desc">What accommodations does the school provide? Examples: extended_time, read_aloud, scribe, modified_curriculum, visual_supports, communication_device, sensory_breaks</div></div>
+        <div class="field-row sped-row"><div class="field-cell"><span class="field-name">certifications_on_staff</span></div><div class="field-cell"><span class="badge badge-list">List</span></div><div class="field-cell field-desc">What professional certifications do SPED staff hold? Examples: BCBA (behavior analyst), SLP (speech-language pathologist), OT (occupational therapist), school_psychologist, autism_specialist</div></div>
+        <div class="field-row sped-row"><div class="field-cell"><span class="field-name">student_support_ratio</span></div><div class="field-cell"><span class="badge badge-text">Text</span></div><div class="field-cell field-desc">Ratio of SPED support staff to SPED students. Example: "1:5" means one support person per 5 SPED students.</div></div>
+        <div class="field-row sped-row"><div class="field-cell"><span class="field-name">num_sped_staff</span></div><div class="field-cell"><span class="badge badge-number">Number</span></div><div class="field-cell field-desc">Total number of dedicated special education staff.</div></div>
+        <div class="field-row sped-row"><div class="field-cell"><span class="field-name">paraprofessional_support</span></div><div class="field-cell"><span class="badge badge-bool">Yes/No</span></div><div class="field-cell field-desc">Are paraprofessionals (aides/assistants) available to support SPED students in class?</div></div>
+        <div class="field-row sped-row"><div class="field-cell"><span class="field-name">dedicated_sped_classrooms</span></div><div class="field-cell"><span class="badge badge-bool">Yes/No</span></div><div class="field-cell field-desc">Does the school have classrooms specifically set up and designated for SPED students?</div></div>
+        <div class="field-row sped-row"><div class="field-cell"><span class="field-name">sped_coordinator_on_staff</span></div><div class="field-cell"><span class="badge badge-bool">Yes/No</span></div><div class="field-cell field-desc">Is there a dedicated SPED coordinator or director on staff?</div></div>
+        <div class="field-row sped-row"><div class="field-cell"><span class="field-name">autism_specific_program</span></div><div class="field-cell"><span class="badge badge-bool">Yes/No</span></div><div class="field-cell field-desc">Does the school have a program specifically designed for students with autism?</div></div>
+        <div class="field-row sped-row"><div class="field-cell"><span class="field-name">twice_exceptional_program</span></div><div class="field-cell"><span class="badge badge-bool">Yes/No</span></div><div class="field-cell field-desc">Does the school have a program for twice-exceptional (2e) students — those who are both gifted and have a learning difference?</div></div>
+        <div class="field-row sped-row"><div class="field-cell"><span class="field-name">behavior_intervention_program</span></div><div class="field-cell"><span class="badge badge-bool">Yes/No</span></div><div class="field-cell field-desc">Does the school have a structured behavior intervention or support program?</div></div>
+        <div class="field-row sped-row"><div class="field-cell"><span class="field-name">early_intervention_program</span></div><div class="field-cell"><span class="badge badge-bool">Yes/No</span></div><div class="field-cell field-desc">Does the school offer early intervention services for young children (Pre-K/K) showing developmental delays?</div></div>
+        <div class="field-row sped-row"><div class="field-cell"><span class="field-name">transition_program</span></div><div class="field-cell"><span class="badge badge-bool">Yes/No</span></div><div class="field-cell field-desc">Does the school offer post-secondary transition services (ages 18–21) to help students with disabilities prepare for adult life?</div></div>
+        <div class="field-row sped-row"><div class="field-cell"><span class="field-name">assistive_technology_program</span></div><div class="field-cell"><span class="badge badge-bool">Yes/No</span></div><div class="field-cell field-desc">Does the school have assistive technology tools (e.g. text-to-speech, AAC devices, adaptive keyboards)?</div></div>
+        <div class="field-row sped-row"><div class="field-cell"><span class="field-name">low_incidence_program</span></div><div class="field-cell"><span class="badge badge-bool">Yes/No</span></div><div class="field-cell field-desc">Does the school serve students with low-incidence disabilities such as deaf-blindness, multiple disabilities, or significant cognitive impairments?</div></div>
+        <div class="field-row sped-row"><div class="field-cell"><span class="field-name">sped_enrollment_pct</span></div><div class="field-cell"><span class="badge badge-number">Number</span></div><div class="field-cell field-desc">What percentage of the student body is enrolled in SPED services? Example: 12.5 (means 12.5%). Between 0 and 100.</div></div>
+      </div>
+    </div>
+
+    <!-- GRADE BAND SPED -->
+    <div class="subsection" id="sped-gradeband">
+      <div class="subsection-title sped-sub">Grade Band SPED Fields</div>
+      <div class="callout">These are the same fields as school-wide SPED, but recorded separately for each grade band. For example, the K–2 band might have speech therapy but the 6–8 band might not. The <strong>band</strong> field identifies which group it applies to.</div>
+      <div class="field-table">
+        <div class="field-table-header"><div>Field Name</div><div>Type</div><div>Description</div></div>
+        <div class="field-row sped-row"><div class="field-cell"><span class="field-name">band</span></div><div class="field-cell"><span class="badge badge-enum">Choice</span></div><div class="field-cell field-desc">Which grade band this block describes. <strong>Allowed values:</strong> early_childhood, primary (K–2), lower_elementary (K–5), upper_elementary (3–5), middle_school (6–8), high_school (9–12), k_8, k_12, 6_12</div></div>
+        <div class="field-row sped-row"><div class="field-cell"><span class="field-name">service_models</span></div><div class="field-cell"><span class="badge badge-list">List</span></div><div class="field-cell field-desc">How SPED services are delivered at this grade band. Same options as school-wide.</div></div>
+        <div class="field-row sped-row"><div class="field-cell"><span class="field-name">disability_categories_served</span></div><div class="field-cell"><span class="badge badge-list">List</span></div><div class="field-cell field-desc">Which disabilities are served at this grade band.</div></div>
+        <div class="field-row sped-row"><div class="field-cell"><span class="field-name">therapies_available</span></div><div class="field-cell"><span class="badge badge-list">List</span></div><div class="field-cell field-desc">Which therapies are available at this grade band.</div></div>
+        <div class="field-row sped-row"><div class="field-cell"><span class="field-name">accommodations</span></div><div class="field-cell"><span class="badge badge-list">List</span></div><div class="field-cell field-desc">Which accommodations are available at this grade band.</div></div>
+        <div class="field-row sped-row"><div class="field-cell"><span class="field-name">certifications_on_staff</span></div><div class="field-cell"><span class="badge badge-list">List</span></div><div class="field-cell field-desc">Staff certifications relevant to this grade band.</div></div>
+        <div class="field-row sped-row"><div class="field-cell"><span class="field-name">iep_504_status</span></div><div class="field-cell"><span class="badge badge-enum">Choice</span></div><div class="field-cell field-desc">IEP / 504 status at this grade band.</div></div>
+        <div class="field-row sped-row"><div class="field-cell"><span class="field-name">inclusion_philosophy</span></div><div class="field-cell"><span class="badge badge-enum">Choice</span></div><div class="field-cell field-desc">Inclusion approach at this grade band.</div></div>
+        <div class="field-row sped-row"><div class="field-cell"><span class="field-name">student_support_ratio</span></div><div class="field-cell"><span class="badge badge-text">Text</span></div><div class="field-cell field-desc">Support staff to SPED student ratio at this grade band. Example: "1:4"</div></div>
+        <div class="field-row sped-row"><div class="field-cell"><span class="field-name">dedicated_sped_classroom</span></div><div class="field-cell"><span class="badge badge-bool">Yes/No</span></div><div class="field-cell field-desc">Is there a dedicated SPED classroom at this grade band?</div></div>
+        <div class="field-row sped-row"><div class="field-cell"><span class="field-name">paraprofessional_support</span></div><div class="field-cell"><span class="badge badge-bool">Yes/No</span></div><div class="field-cell field-desc">Are paraprofessional aides available at this grade band?</div></div>
+        <div class="field-row sped-row"><div class="field-cell"><span class="field-name">co_teaching_available</span></div><div class="field-cell"><span class="badge badge-bool">Yes/No</span></div><div class="field-cell field-desc">Is co-teaching (two teachers in one room) used at this grade band?</div></div>
+        <div class="field-row sped-row"><div class="field-cell"><span class="field-name">self_contained_available</span></div><div class="field-cell"><span class="badge badge-bool">Yes/No</span></div><div class="field-cell field-desc">Is a self-contained (separate) SPED classroom available at this grade band?</div></div>
+        <div class="field-row sped-row"><div class="field-cell"><span class="field-name">transition_services</span></div><div class="field-cell"><span class="badge badge-bool">Yes/No</span></div><div class="field-cell field-desc">Are transition/life-skills services available at this grade band?</div></div>
+      </div>
+    </div>
+
+    <!-- INDIVIDUAL GRADE SPED -->
+    <div class="subsection" id="sped-gradelevel">
+      <div class="subsection-title sped-sub">Individual Grade SPED Fields</div>
+      <div class="callout">The most granular level. Identical fields to grade band, but scoped to a single grade (e.g. just Kindergarten, or just Grade 7). Use this when a school's website or materials describe SPED support differently for a specific grade.</div>
+      <div class="field-table">
+        <div class="field-table-header"><div>Field Name</div><div>Type</div><div>Description</div></div>
+        <div class="field-row sped-row"><div class="field-cell"><span class="field-name">grade</span></div><div class="field-cell"><span class="badge badge-enum">Choice</span></div><div class="field-cell field-desc">Which specific grade this block describes. <strong>Allowed values:</strong> PK, TK, K, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12</div></div>
+        <div class="field-row sped-row"><div class="field-cell"><span class="field-name">service_models</span></div><div class="field-cell"><span class="badge badge-list">List</span></div><div class="field-cell field-desc">Service delivery models for this specific grade.</div></div>
+        <div class="field-row sped-row"><div class="field-cell"><span class="field-name">disability_categories_served</span></div><div class="field-cell"><span class="badge badge-list">List</span></div><div class="field-cell field-desc">Disabilities served at this specific grade.</div></div>
+        <div class="field-row sped-row"><div class="field-cell"><span class="field-name">therapies_available</span></div><div class="field-cell"><span class="badge badge-list">List</span></div><div class="field-cell field-desc">Therapies available at this specific grade.</div></div>
+        <div class="field-row sped-row"><div class="field-cell"><span class="field-name">accommodations</span></div><div class="field-cell"><span class="badge badge-list">List</span></div><div class="field-cell field-desc">Accommodations available at this specific grade.</div></div>
+        <div class="field-row sped-row"><div class="field-cell"><span class="field-name">iep_504_status</span></div><div class="field-cell"><span class="badge badge-enum">Choice</span></div><div class="field-cell field-desc">IEP / 504 plan availability at this specific grade.</div></div>
+        <div class="field-row sped-row"><div class="field-cell"><span class="field-name">inclusion_philosophy</span></div><div class="field-cell"><span class="badge badge-enum">Choice</span></div><div class="field-cell field-desc">Inclusion approach at this specific grade.</div></div>
+        <div class="field-row sped-row"><div class="field-cell"><span class="field-name">student_support_ratio</span></div><div class="field-cell"><span class="badge badge-text">Text</span></div><div class="field-cell field-desc">Support ratio at this specific grade. Example: "1:3"</div></div>
+        <div class="field-row sped-row"><div class="field-cell"><span class="field-name">dedicated_sped_classroom</span></div><div class="field-cell"><span class="badge badge-bool">Yes/No</span></div><div class="field-cell field-desc">Is there a dedicated SPED classroom for this grade?</div></div>
+        <div class="field-row sped-row"><div class="field-cell"><span class="field-name">paraprofessional_support</span></div><div class="field-cell"><span class="badge badge-bool">Yes/No</span></div><div class="field-cell field-desc">Are paraprofessional aides available for this grade?</div></div>
+        <div class="field-row sped-row"><div class="field-cell"><span class="field-name">transition_services</span></div><div class="field-cell"><span class="badge badge-bool">Yes/No</span></div><div class="field-cell field-desc">Are transition services available at this grade?</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GRADE LEVEL ATTRIBUTES -->
+  <div class="section" id="gradelevel">
+    <div class="section-header">
+      <div class="section-icon" style="background:#eef6f8;">📊</div>
+      <div>
+        <h2>Grade Level Attributes</h2>
+        <p>Programme and environment details broken down by grade band — teaching style, class size, workload, activities</p>
+      </div>
+    </div>
+    <div class="callout">There is one block of these fields per grade band (e.g. one for K–2, one for 6–8). Each block also contains its own SPED summary for that band.</div>
+    <div class="field-table">
+      <div class="field-table-header"><div>Field Name</div><div>Type</div><div>Description</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">grade_band</span></div><div class="field-cell"><span class="badge badge-enum">Choice</span></div><div class="field-cell field-desc">Which grade band this block covers. Example: primary (K–2), middle_school (6–8)</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">grade_range_text</span></div><div class="field-cell"><span class="badge badge-text">Text</span></div><div class="field-cell field-desc">Human-readable range. Example: "K–2", "Grades 6–8"</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">individual_grades</span></div><div class="field-cell"><span class="badge badge-list">List</span></div><div class="field-cell field-desc">Specific grades included if narrower than the full band. Example: ["K", "1"] for a partial band.</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">learning_models</span></div><div class="field-cell"><span class="badge badge-list">List</span></div><div class="field-cell field-desc">Teaching approach(es) used at this grade band. Examples: traditional, montessori, project_based, play_based, classical, waldorf, reggio_emilia, direct_instruction, inquiry_based</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">academic_focus</span></div><div class="field-cell"><span class="badge badge-list">List</span></div><div class="field-cell field-desc">What the academic programme emphasizes. Examples: foundational, college_prep, gifted_talented, stem, arts, vocational_cte, social_emotional, life_skills</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">program_tags</span></div><div class="field-cell"><span class="badge badge-list">List</span></div><div class="field-cell field-desc">Named programmes at this grade band. Example: ["IB PYP", "AVID", "Reading Recovery"]</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">class_size_category</span></div><div class="field-cell"><span class="badge badge-enum">Choice</span></div><div class="field-cell field-desc">Class size bucket at this grade band. micro (≤10), small (11–18), medium (19–25), large (26–32), very_large (33+)</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">avg_class_size</span></div><div class="field-cell"><span class="badge badge-number">Number</span></div><div class="field-cell field-desc">Average number of students per class at this grade band. Example: 16</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">student_teacher_ratio</span></div><div class="field-cell"><span class="badge badge-text">Text</span></div><div class="field-cell field-desc">Staff-to-student ratio at this grade band. Example: "10:1"</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">screen_time_policy</span></div><div class="field-cell"><span class="badge badge-enum">Choice</span></div><div class="field-cell field-desc">Device/screen policy at this grade band. none, minimal, moderate, heavy, device_free, byod (bring your own device), school_provided</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">workload_level</span></div><div class="field-cell"><span class="badge badge-enum">Choice</span></div><div class="field-cell field-desc">Academic workload intensity at this grade band. light, flexible, moderate, rigorous, very_rigorous</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">full_day</span></div><div class="field-cell"><span class="badge badge-bool">Yes/No</span></div><div class="field-cell field-desc">Is full-day school available at this grade band?</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">half_day_option</span></div><div class="field-cell"><span class="badge badge-bool">Yes/No</span></div><div class="field-cell field-desc">Is a half-day option available (common for Pre-K/K)?</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">extended_care</span></div><div class="field-cell"><span class="badge badge-bool">Yes/No</span></div><div class="field-cell field-desc">Is extended care (before/after school) available at this grade band?</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">extracurriculars</span></div><div class="field-cell"><span class="badge badge-list">List</span></div><div class="field-cell field-desc">Extracurricular activities available at this grade band. Example: ["Chess Club", "Drama", "Robotics"]</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">sports</span></div><div class="field-cell"><span class="badge badge-list">List</span></div><div class="field-cell field-desc">Sports offered at this grade band. Example: ["Soccer", "Basketball", "Swimming"]</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">dual_language_immersion</span></div><div class="field-cell"><span class="badge badge-bool">Yes/No</span></div><div class="field-cell field-desc">Is dual-language immersion offered at this grade band?</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">languages_offered</span></div><div class="field-cell"><span class="badge badge-list">List</span></div><div class="field-cell field-desc">Foreign languages taught at this grade band. Example: ["Spanish", "French"]</div></div>
+    </div>
+  </div>
+
+  <!-- FACILITIES -->
+  <div class="section" id="facilities">
+    <div class="section-header">
+      <div class="section-icon" style="background:#f0fff4;">🏗</div>
+      <div><h2>Facilities</h2><p>Physical spaces and infrastructure the school has on-site</p></div>
+    </div>
+    <div class="field-table">
+      <div class="field-table-header"><div>Field Name</div><div>Type</div><div>Description</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">science_labs</span></div><div class="field-cell"><span class="badge badge-bool">Yes/No</span></div><div class="field-cell field-desc">Does the school have dedicated science laboratory rooms?</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">computer_labs</span></div><div class="field-cell"><span class="badge badge-bool">Yes/No</span></div><div class="field-cell field-desc">Does the school have dedicated computer labs?</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">makerspace</span></div><div class="field-cell"><span class="badge badge-bool">Yes/No</span></div><div class="field-cell field-desc">Does the school have a makerspace or fabrication lab (3D printers, tools, etc.)?</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">library</span></div><div class="field-cell"><span class="badge badge-bool">Yes/No</span></div><div class="field-cell field-desc">Does the school have a library or media center?</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">gymnasium</span></div><div class="field-cell"><span class="badge badge-bool">Yes/No</span></div><div class="field-cell field-desc">Does the school have a gymnasium or indoor PE facility?</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">pool</span></div><div class="field-cell"><span class="badge badge-bool">Yes/No</span></div><div class="field-cell field-desc">Does the school have a swimming pool?</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">auditorium</span></div><div class="field-cell"><span class="badge badge-bool">Yes/No</span></div><div class="field-cell field-desc">Does the school have an auditorium or large performance space?</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">theater</span></div><div class="field-cell"><span class="badge badge-bool">Yes/No</span></div><div class="field-cell field-desc">Does the school have a theater for productions?</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">playground</span></div><div class="field-cell"><span class="badge badge-bool">Yes/No</span></div><div class="field-cell field-desc">Does the school have a playground?</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">sensory_room</span></div><div class="field-cell"><span class="badge badge-bool">Yes/No</span></div><div class="field-cell field-desc">Does the school have a sensory room (calm space with sensory tools for students with autism, sensory processing needs, etc.)?</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">cafeteria</span></div><div class="field-cell"><span class="badge badge-bool">Yes/No</span></div><div class="field-cell field-desc">Does the school have a cafeteria serving meals?</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">athletic_fields</span></div><div class="field-cell"><span class="badge badge-bool">Yes/No</span></div><div class="field-cell field-desc">Does the school have outdoor athletic fields (soccer, football, etc.)?</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">art_studio</span></div><div class="field-cell"><span class="badge badge-bool">Yes/No</span></div><div class="field-cell field-desc">Does the school have a dedicated art studio?</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">music_room</span></div><div class="field-cell"><span class="badge badge-bool">Yes/No</span></div><div class="field-cell field-desc">Does the school have a dedicated music room or practice rooms?</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">adaptive_pe_space</span></div><div class="field-cell"><span class="badge badge-bool">Yes/No</span></div><div class="field-cell field-desc">Does the school have space for adaptive physical education for students with physical disabilities?</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">wheelchair_accessible</span></div><div class="field-cell"><span class="badge badge-bool">Yes/No</span></div><div class="field-cell field-desc">Is the school building wheelchair-accessible (ramps, elevators, accessible restrooms)?</div></div>
+    </div>
+  </div>
+
+  <!-- SCHOOL FEATURES -->
+  <div class="section" id="features">
+    <div class="section-header">
+      <div class="section-icon" style="background:#fff8e8;">✅</div>
+      <div><h2>School Features</h2><p>Quick Yes/No flags used for search matching — "does this school have X?"</p></div>
+    </div>
+    <div class="callout">These are fast-lookup flags used to match families to schools based on their priorities. They summarize information found in detail elsewhere in the record.</div>
+    <div class="field-table">
+      <div class="field-table-header"><div>Field Name</div><div>Type</div><div>Description</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">small_class</span></div><div class="field-cell"><span class="badge badge-bool">Yes/No</span></div><div class="field-cell field-desc">Known for small class sizes (typically 18 or fewer)</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">strong_academics</span></div><div class="field-cell"><span class="badge badge-bool">Yes/No</span></div><div class="field-cell field-desc">Recognized for strong academic outcomes</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">college_prep</span></div><div class="field-cell"><span class="badge badge-bool">Yes/No</span></div><div class="field-cell field-desc">Focused on preparing students for college</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">gifted</span></div><div class="field-cell"><span class="badge badge-bool">Yes/No</span></div><div class="field-cell field-desc">Has a gifted & talented program</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">ap_ib</span></div><div class="field-cell"><span class="badge badge-bool">Yes/No</span></div><div class="field-cell field-desc">Offers AP or IB courses</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">dual_enrollment</span></div><div class="field-cell"><span class="badge badge-bool">Yes/No</span></div><div class="field-cell field-desc">Students can earn college credit while in high school</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">stem_focus</span></div><div class="field-cell"><span class="badge badge-bool">Yes/No</span></div><div class="field-cell field-desc">Has a STEM or STEAM emphasis</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">arts_focus</span></div><div class="field-cell"><span class="badge badge-bool">Yes/No</span></div><div class="field-cell field-desc">Has a strong arts emphasis</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">faith_and_values</span></div><div class="field-cell"><span class="badge badge-bool">Yes/No</span></div><div class="field-cell field-desc">Integrates faith or religious values into education</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">special_needs</span></div><div class="field-cell"><span class="badge badge-bool">Yes/No</span></div><div class="field-cell field-desc">Has strong special needs support</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">behavior_intervention</span></div><div class="field-cell"><span class="badge badge-bool">Yes/No</span></div><div class="field-cell field-desc">Has structured behavior intervention program</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">social_emotional_learning</span></div><div class="field-cell"><span class="badge badge-bool">Yes/No</span></div><div class="field-cell field-desc">Has a dedicated SEL (Social-Emotional Learning) curriculum</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">montessori</span></div><div class="field-cell"><span class="badge badge-bool">Yes/No</span></div><div class="field-cell field-desc">Uses the Montessori method</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">dual_language</span></div><div class="field-cell"><span class="badge badge-bool">Yes/No</span></div><div class="field-cell field-desc">Offers dual-language or bilingual immersion</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">diversity</span></div><div class="field-cell"><span class="badge badge-bool">Yes/No</span></div><div class="field-cell field-desc">Known for a diverse student body or diversity initiatives</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">safety</span></div><div class="field-cell"><span class="badge badge-bool">Yes/No</span></div><div class="field-cell field-desc">Known for a safe school environment and strong safety measures</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">minimal_screen</span></div><div class="field-cell"><span class="badge badge-bool">Yes/No</span></div><div class="field-cell field-desc">Known for a low-screen or device-free philosophy</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">manageable_workload</span></div><div class="field-cell"><span class="badge badge-bool">Yes/No</span></div><div class="field-cell field-desc">Known for not overwhelming students with homework</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">extended_care</span></div><div class="field-cell"><span class="badge badge-bool">Yes/No</span></div><div class="field-cell field-desc">Offers before/after school care</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">athletics</span></div><div class="field-cell"><span class="badge badge-bool">Yes/No</span></div><div class="field-cell field-desc">Has a strong athletics program</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">vocational</span></div><div class="field-cell"><span class="badge badge-bool">Yes/No</span></div><div class="field-cell field-desc">Offers vocational or CTE (Career & Technical Education) programs</div></div>
+    </div>
+  </div>
+
+  <!-- COLLEGE OUTCOMES -->
+  <div class="section" id="college">
+    <div class="section-header">
+      <div class="section-icon" style="background:#f3f0fa;">🎓</div>
+      <div><h2>College Outcomes</h2><p>For high schools — where do graduates go and how well do they perform?</p></div>
+    </div>
+    <div class="field-table">
+      <div class="field-table-header"><div>Field Name</div><div>Type</div><div>Description</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">college_acceptance_rate</span></div><div class="field-cell"><span class="badge badge-text">Text</span></div><div class="field-cell field-desc">Percentage of graduates accepted to college. Example: "98%"</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">graduation_rate</span></div><div class="field-cell"><span class="badge badge-text">Text</span></div><div class="field-cell field-desc">Percentage of students who graduate. Example: "94%"</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">ap_courses</span></div><div class="field-cell"><span class="badge badge-list">List</span></div><div class="field-cell field-desc">Names of AP courses offered. Example: ["AP Calculus AB", "AP US History", "AP Biology"]</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">ib_program</span></div><div class="field-cell"><span class="badge badge-bool">Yes/No</span></div><div class="field-cell field-desc">Does the school offer the International Baccalaureate program?</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">ib_program_type</span></div><div class="field-cell"><span class="badge badge-text">Text</span></div><div class="field-cell field-desc">Which IB programme(s). Example: "PYP, MYP, Diploma Programme"</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">dual_enrollment_colleges</span></div><div class="field-cell"><span class="badge badge-list">List</span></div><div class="field-cell field-desc">College partners where students can earn dual-enrollment credit. Example: ["Austin Community College", "UT Austin"]</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">college_placements</span></div><div class="field-cell"><span class="badge badge-list">List</span></div><div class="field-cell field-desc">Colleges where recent graduates have been accepted. Example: ["MIT", "Harvard", "UT Austin"]</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">avg_sat_score</span></div><div class="field-cell"><span class="badge badge-number">Number</span></div><div class="field-cell field-desc">Average SAT score of graduating students. Example: 1280</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">avg_act_score</span></div><div class="field-cell"><span class="badge badge-number">Number</span></div><div class="field-cell field-desc">Average ACT score of graduating students. Example: 27.5</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">national_merit_scholars</span></div><div class="field-cell"><span class="badge badge-bool">Yes/No</span></div><div class="field-cell field-desc">Has the school produced National Merit Scholars?</div></div>
+    </div>
+  </div>
+
+  <!-- ACTIVITIES -->
+  <div class="section" id="activities">
+    <div class="section-header">
+      <div class="section-icon" style="background:#f0fff4;">⚽</div>
+      <div><h2>Activities</h2><p>Clubs, sports, and arts offerings school-wide</p></div>
+    </div>
+    <div class="field-table">
+      <div class="field-table-header"><div>Field Name</div><div>Type</div><div>Description</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">clubs</span></div><div class="field-cell"><span class="badge badge-list">List</span></div><div class="field-cell field-desc">Academic or interest clubs. Example: ["Robotics Club", "Debate", "Chess", "Student Council"]</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">athletics</span></div><div class="field-cell"><span class="badge badge-list">List</span></div><div class="field-cell field-desc">Sports teams and athletic programs. Example: ["Varsity Soccer", "Swim Team", "Track & Field"]</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">arts_offerings</span></div><div class="field-cell"><span class="badge badge-list">List</span></div><div class="field-cell field-desc">Arts-related programs and courses. Example: ["Band", "Choir", "Drama", "Visual Arts"]</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">image_urls</span></div><div class="field-cell"><span class="badge badge-list">List</span></div><div class="field-cell field-desc">URLs of school photos (campus, classrooms, events) for display purposes.</div></div>
+    </div>
+  </div>
+
+  <!-- EVIDENCE -->
+  <div class="section" id="evidence">
+    <div class="section-header">
+      <div class="section-icon" style="background:#eef6f8;">🔍</div>
+      <div><h2>Evidence & Sources</h2><p>How confident are we in each piece of data, and where did it come from?</p></div>
+    </div>
+    <div class="callout">Every major section carries its own evidence block. This means we know exactly which source supports which claim — not just that "we scraped it from somewhere."</div>
+    <div class="field-table">
+      <div class="field-table-header"><div>Field Name</div><div>Type</div><div>Description</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">confidence_scores</span></div><div class="field-cell"><span class="badge badge-object">Section</span></div><div class="field-cell field-desc">A score from 0.0 to 1.0 for each field indicating how confident we are in the value. Example: <code>{"sped_available": 0.95, "tuition_min": 0.7}</code>. 1.0 = fully confirmed from a primary source. 0.5 = inferred or found on a secondary site.</div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">source_evidence</span></div><div class="field-cell"><span class="badge badge-object">Section</span></div><div class="field-cell field-desc">The verbatim text from the source that supports each field's value. Example: <code>{"sped_available": "We proudly offer IEP and 504 support services for all qualifying students."}</code></div></div>
+      <div class="field-row"><div class="field-cell"><span class="field-name">sources</span></div><div class="field-cell"><span class="badge badge-list">List</span></div><div class="field-cell field-desc">All URLs used to compile this section. Each entry has: <strong>title</strong> (page name), <strong>url</strong> (web address), <strong>snippet</strong> (relevant excerpt), <strong>scraped_at</strong> (when it was scraped), <strong>confidence</strong> (0.0–1.0 quality score).</div></div>
+    </div>
+  </div>
+
+  <!-- ALL ENUMS REFERENCE -->
+  <div class="section" id="all-enums">
+    <div class="section-header">
+      <div class="section-icon" style="background:#f3f0fa;">📑</div>
+      <div><h2>Reference: All Allowed Values</h2><p>Complete list of every valid option for every Choice field</p></div>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">SPED: Disability Categories</div>
+      <p style="color:var(--ink-soft);font-size:13px;margin-bottom:8px;">All IDEA 2004 federal categories plus common extensions. Use these exact values.</p>
+      <div class="enum-grid">
+        <div class="enum-chip sped-chip">autism</div>
+        <div class="enum-chip sped-chip">adhd</div>
+        <div class="enum-chip sped-chip">dyslexia</div>
+        <div class="enum-chip sped-chip">dysgraphia</div>
+        <div class="enum-chip sped-chip">dyscalculia</div>
+        <div class="enum-chip sped-chip">specific_learning_disability</div>
+        <div class="enum-chip sped-chip">speech_language_impairment</div>
+        <div class="enum-chip sped-chip">developmental_delay</div>
+        <div class="enum-chip sped-chip">intellectual_disability</div>
+        <div class="enum-chip sped-chip">emotional_disturbance</div>
+        <div class="enum-chip sped-chip">other_health_impairment</div>
+        <div class="enum-chip sped-chip">hearing_impairment</div>
+        <div class="enum-chip sped-chip">deafness</div>
+        <div class="enum-chip sped-chip">visual_impairment</div>
+        <div class="enum-chip sped-chip">deaf_blindness</div>
+        <div class="enum-chip sped-chip">orthopedic_impairment</div>
+        <div class="enum-chip sped-chip">traumatic_brain_injury</div>
+        <div class="enum-chip sped-chip">multiple_disabilities</div>
+        <div class="enum-chip sped-chip">twice_exceptional</div>
+        <div class="enum-chip sped-chip">anxiety_mood_disorder</div>
+        <div class="enum-chip sped-chip">down_syndrome</div>
+        <div class="enum-chip sped-chip">cerebral_palsy</div>
+        <div class="enum-chip sped-chip">executive_function</div>
+        <div class="enum-chip sped-chip">social_communication</div>
+        <div class="enum-chip sped-chip">other</div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">SPED: Service Delivery Models</div>
+      <div class="enum-grid">
+        <div class="enum-chip sped-chip">push_in</div>
+        <div class="enum-chip sped-chip">pull_out</div>
+        <div class="enum-chip sped-chip">resource_room</div>
+        <div class="enum-chip sped-chip">co_teaching</div>
+        <div class="enum-chip sped-chip">full_inclusion</div>
+        <div class="enum-chip sped-chip">partial_inclusion</div>
+        <div class="enum-chip sped-chip">self_contained_classroom</div>
+        <div class="enum-chip sped-chip">separate_school</div>
+        <div class="enum-chip sped-chip">therapeutic_day</div>
+        <div class="enum-chip sped-chip">residential</div>
+        <div class="enum-chip sped-chip">homebound</div>
+        <div class="enum-chip sped-chip">itinerant_services</div>
+        <div class="enum-chip sped-chip">consultant_model</div>
+        <div class="enum-chip sped-chip">hybrid</div>
+        <div class="enum-chip sped-chip">unknown</div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">SPED: Therapies</div>
+      <div class="enum-grid">
+        <div class="enum-chip sped-chip">speech_language</div>
+        <div class="enum-chip sped-chip">occupational</div>
+        <div class="enum-chip sped-chip">physical</div>
+        <div class="enum-chip sped-chip">applied_behavior_analysis</div>
+        <div class="enum-chip sped-chip">behavioral</div>
+        <div class="enum-chip sped-chip">vision</div>
+        <div class="enum-chip sped-chip">orientation_mobility</div>
+        <div class="enum-chip sped-chip">music_therapy</div>
+        <div class="enum-chip sped-chip">art_therapy</div>
+        <div class="enum-chip sped-chip">counseling</div>
+        <div class="enum-chip sped-chip">assistive_technology</div>
+        <div class="enum-chip sped-chip">social_skills_group</div>
+        <div class="enum-chip sped-chip">feeding_therapy</div>
+        <div class="enum-chip sped-chip">play_therapy</div>
+        <div class="enum-chip sped-chip">sensory_integration</div>
+        <div class="enum-chip sped-chip">other</div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">SPED: Accommodations</div>
+      <div class="enum-grid">
+        <div class="enum-chip sped-chip">extended_time</div>
+        <div class="enum-chip sped-chip">preferential_seating</div>
+        <div class="enum-chip sped-chip">reduced_assignments</div>
+        <div class="enum-chip sped-chip">oral_testing</div>
+        <div class="enum-chip sped-chip">scribe</div>
+        <div class="enum-chip sped-chip">calculator_use</div>
+        <div class="enum-chip sped-chip">read_aloud</div>
+        <div class="enum-chip sped-chip">modified_curriculum</div>
+        <div class="enum-chip sped-chip">alternative_assessment</div>
+        <div class="enum-chip sped-chip">sensory_breaks</div>
+        <div class="enum-chip sped-chip">visual_supports</div>
+        <div class="enum-chip sped-chip">communication_device</div>
+        <div class="enum-chip sped-chip">sign_language</div>
+        <div class="enum-chip sped-chip">braille</div>
+        <div class="enum-chip sped-chip">large_print</div>
+        <div class="enum-chip sped-chip">noise_reduction</div>
+        <div class="enum-chip sped-chip">behavior_support_plan</div>
+        <div class="enum-chip sped-chip">social_story</div>
+        <div class="enum-chip sped-chip">transition_planning</div>
+        <div class="enum-chip sped-chip">other</div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">SPED: Staff Certifications</div>
+      <div class="enum-grid">
+        <div class="enum-chip sped-chip">BCBA (Behavior Analyst)</div>
+        <div class="enum-chip sped-chip">SLP (Speech-Language)</div>
+        <div class="enum-chip sped-chip">OT (Occupational Therapist)</div>
+        <div class="enum-chip sped-chip">PT (Physical Therapist)</div>
+        <div class="enum-chip sped-chip">LCSW (Social Worker)</div>
+        <div class="enum-chip sped-chip">LPC (Counselor)</div>
+        <div class="enum-chip sped-chip">school_psychologist</div>
+        <div class="enum-chip sped-chip">special_education_credential</div>
+        <div class="enum-chip sped-chip">autism_specialist</div>
+        <div class="enum-chip sped-chip">reading_specialist</div>
+        <div class="enum-chip sped-chip">vision_specialist</div>
+        <div class="enum-chip sped-chip">hearing_specialist</div>
+        <div class="enum-chip sped-chip">ATP (Assistive Tech)</div>
+        <div class="enum-chip sped-chip">transition_specialist</div>
+        <div class="enum-chip sped-chip">OMS (Orientation/Mobility)</div>
+        <div class="enum-chip sped-chip">other</div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">Learning Models</div>
+      <div class="enum-grid">
+        <div class="enum-chip">traditional</div>
+        <div class="enum-chip">montessori</div>
+        <div class="enum-chip">waldorf</div>
+        <div class="enum-chip">classical</div>
+        <div class="enum-chip">project_based</div>
+        <div class="enum-chip">play_based</div>
+        <div class="enum-chip">inquiry_based</div>
+        <div class="enum-chip">socratic</div>
+        <div class="enum-chip">direct_instruction</div>
+        <div class="enum-chip">blended</div>
+        <div class="enum-chip">reggio_emilia</div>
+        <div class="enum-chip">expeditionary</div>
+        <div class="enum-chip">stem_focused</div>
+        <div class="enum-chip">arts_integrated</div>
+        <div class="enum-chip">dual_language_immersion</div>
+        <div class="enum-chip">therapeutic</div>
+        <div class="enum-chip">vocational</div>
+        <div class="enum-chip">online_asynchronous</div>
+        <div class="enum-chip">online_synchronous</div>
+        <div class="enum-chip">hybrid</div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">Academic Focus Areas</div>
+      <div class="enum-grid">
+        <div class="enum-chip">foundational</div>
+        <div class="enum-chip">college_prep</div>
+        <div class="enum-chip">advanced_academic</div>
+        <div class="enum-chip">gifted_talented</div>
+        <div class="enum-chip">ap_ib</div>
+        <div class="enum-chip">dual_enrollment</div>
+        <div class="enum-chip">credit_recovery</div>
+        <div class="enum-chip">arts</div>
+        <div class="enum-chip">stem</div>
+        <div class="enum-chip">humanities</div>
+        <div class="enum-chip">world_languages</div>
+        <div class="enum-chip">sports_athletics</div>
+        <div class="enum-chip">vocational_cte</div>
+        <div class="enum-chip">social_emotional</div>
+        <div class="enum-chip">therapeutic</div>
+        <div class="enum-chip">life_skills</div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">Accreditation Bodies</div>
+      <div class="enum-grid">
+        <div class="enum-chip">Cognia</div>
+        <div class="enum-chip">NEASC</div>
+        <div class="enum-chip">WASC</div>
+        <div class="enum-chip">SACS_CASI</div>
+        <div class="enum-chip">NCA_CASI</div>
+        <div class="enum-chip">NAEYC</div>
+        <div class="enum-chip">IB</div>
+        <div class="enum-chip">AMS (Montessori)</div>
+        <div class="enum-chip">AMI (Montessori)</div>
+        <div class="enum-chip">AMSHQ (Montessori)</div>
+        <div class="enum-chip">ACCS (Classical)</div>
+        <div class="enum-chip">state_approved</div>
+        <div class="enum-chip">other</div>
+      </div>
+    </div>
+
+  </div>
+
+</main>
+</div>
+
+<script>
+  // Smooth scroll for sidebar links
+  document.querySelectorAll('nav a').forEach(a => {
+    a.addEventListener('click', e => {
+      const href = a.getAttribute('href');
+      if (href && href.startsWith('#')) {
+        e.preventDefault();
+        document.querySelector(href)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+
+  // Highlight active nav item on scroll
+  const sections = document.querySelectorAll('.section[id]');
+  const navLinks = document.querySelectorAll('nav a[href^="#"]');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(l => l.style.color = '');
+        const active = document.querySelector(`nav a[href="#${entry.target.id}"]`);
+        if (active) { active.style.color = '#fff'; active.style.borderLeftColor = active.classList.contains('sped-link') ? '#d45a2a' : '#2a7a8c'; }
+      }
+    });
+  }, { threshold: 0.3 });
+  sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>
